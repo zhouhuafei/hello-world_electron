@@ -1,5 +1,8 @@
 import { ipcRenderer, contextBridge } from 'electron'
 
+window.ipcRenderer = ipcRenderer
+window.contextBridge = contextBridge
+
 // --------- Expose some API to the Renderer process ---------
 contextBridge.exposeInMainWorld('ipcRenderer', {
   on(...args: Parameters<typeof ipcRenderer.on>) {
