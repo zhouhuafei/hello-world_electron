@@ -3,6 +3,7 @@
     "composite": true,
     "module": "ESNext",
     "moduleResolution": "Node",
+    "strict": false,
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true
   },

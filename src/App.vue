@@ -3,18 +3,15 @@
 </template>
 
 <script setup lang="ts">
-import { wx } from './utils/wx.ts'
+import { mp } from './utils/mp'
 
 const thisMethods = {
-  uploadFile () {
-    wx.chooseFile({
-      success (e) {
-        console.log('e：', e)
-        const filePath = Array.from(e.tempFilePaths).map(v => v.path)
-        window.ipcRenderer.invoke('upload-file', filePath).then((response) => {
-          console.log('图片处理后的路径:', response)
-        })
-      }
+  async uploadFile () {
+    const res: any = await mp.chooseMedia({ count: 1 })
+    const tempFiles = res.tempFiles.filter(tempFile => tempFile.tempFilePath.type.includes('image/'))
+    const filePath = tempFiles.map(tempFile => tempFile.tempFilePath)[0].path
+    window.ipcRenderer.invoke('upload-file', filePath).then((response) => {
+      console.log('图片处理后的路径:', response)
     })
   }
 }
