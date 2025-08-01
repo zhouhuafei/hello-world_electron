@@ -98,8 +98,9 @@
       <button id="space">空格</button>
     </div>
     <div class="hint">
-      <div>手指上滑 → 下键、手指下滑 → 上键</div>
-      <div>手指左滑 → 左键、手指右滑 → 右键</div>
+      <div>任意区域手指上滑 → 下键、任意区域手指下滑 → 上键</div>
+      <div>任意区域手指左滑 → 左键、任意区域手指右滑 → 右键</div>
+      <div>点击非按钮区域 → 等同于按空格键</div>
     </div>
 
     <script>
@@ -139,11 +140,30 @@
     }
 
     // 绑定按钮事件
-    document.getElementById('up').addEventListener('click', () => sendCommand('up'))
-    document.getElementById('down').addEventListener('click', () => sendCommand('down'))
-    document.getElementById('left').addEventListener('click', () => sendCommand('left'))
-    document.getElementById('right').addEventListener('click', () => sendCommand('right'))
-    document.getElementById('space').addEventListener('click', () => sendCommand('space'))
+    document.getElementById('up').addEventListener('click', (e) => {
+      e.stopPropagation()
+      sendCommand('up')
+    })
+    document.getElementById('down').addEventListener('click', (e) => {
+      e.stopPropagation()
+      sendCommand('down')
+    })
+    document.getElementById('left').addEventListener('click', (e) => {
+      e.stopPropagation()
+      sendCommand('left')
+    })
+    document.getElementById('right').addEventListener('click', (e) => {
+      e.stopPropagation()
+      sendCommand('right')
+    })
+    document.getElementById('space').addEventListener('click', (e) => {
+      e.stopPropagation()
+      sendCommand('space')
+    })
+    document.addEventListener('click', (e) => {
+      e.stopPropagation()
+      sendCommand('space')
+    })
 
     // 绑定键盘事件
     document.addEventListener('keydown', (e) => {
