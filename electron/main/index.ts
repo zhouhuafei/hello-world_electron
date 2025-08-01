@@ -1,8 +1,13 @@
-import { app, BrowserWindow, shell, ipcMain } from 'electron'
+import { app, BrowserWindow, shell, ipcMain, Menu } from 'electron'
 import { createRequire } from 'node:module'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 import os from 'node:os'
+import Koa from 'koa'
+import staticServe from 'koa-static'
+import Router from 'koa-router'
+import WebSocket, { WebSocketServer } from 'ws'
+import robot from 'robotjs'
 
 const require = createRequire(import.meta.url)
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -17,6 +22,81 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 // ├─┬ dist
 // │ └── index.html    > Electron-Renderer
 //
+
+// 服务器相关配置
+const PORT = 5918
+const localIP = getLocalIP()
+const serverUrl = `http://${localIP}:${PORT}`
+
+// 初始化Koa服务器
+const appKoa = new Koa()
+const router = new Router()
+
+// 设置静态文件目录
+appKoa.use(staticServe(path.join(__dirname, '../../public')))
+
+// 路由
+router.get('/', (ctx) => {
+  ctx.redirect('/controller.html')
+})
+
+appKoa.use(router.routes())
+
+// 启动HTTP服务器
+const server = appKoa.listen(PORT, () => {
+  console.log(`Server running at ${serverUrl}`)
+})
+
+// 启动WebSocket服务器
+const wss = new WebSocketServer({ server })
+wss.on('connection', (ws) => {
+  console.log('Client connected')
+
+  ws.on('message', (message) => {
+    const command = message.toString()
+    console.log(`Received command: ${command}`)
+
+    // 根据命令模拟键盘输入
+    switch (command) {
+      case 'up':
+        robot.keyTap('up')
+        break
+      case 'down':
+        robot.keyTap('down')
+        break
+      case 'left':
+        robot.keyTap('left')
+        break
+      case 'right':
+        robot.keyTap('right')
+        break
+      case 'space':
+        robot.keyTap('space')
+        break
+    }
+  })
+
+  ws.on('close', () => {
+    console.log('Client disconnected')
+  })
+})
+
+// 获取本地IP地址
+function getLocalIP () {
+  const interfaces = os.networkInterfaces()
+  for (const devName in interfaces) {
+    const iface = interfaces[devName]
+    for (let i = 0; i < iface.length; i++) {
+      const alias = iface[i]
+      if (alias.family === 'IPv4' && alias.address !== '127.0.0.1' && !alias.internal) {
+        return alias.address
+      }
+    }
+  }
+  return '127.0.0.1'
+}
+
+// 原有Electron代码
 process.env.APP_ROOT = path.join(__dirname, '../..')
 
 export const MAIN_DIST = path.join(process.env.APP_ROOT, 'dist-electron')
@@ -44,8 +124,10 @@ const indexHtml = path.join(RENDERER_DIST, 'index.html')
 
 async function createWindow () {
   win = new BrowserWindow({
-    title: 'Main window',
+    title: '键盘控制器',
     icon: path.join(process.env.VITE_PUBLIC, 'favicon.ico'),
+    width: 600,
+    height: 600,
     webPreferences: {
       preload
       // Warning: Enable nodeIntegration and disable contextIsolation is not secure in production
@@ -68,6 +150,9 @@ async function createWindow () {
   // Test actively push message to the Electron-Renderer
   win.webContents.on('did-finish-load', () => {
     win?.webContents.send('main-process-message', new Date().toLocaleString())
+
+    // 向渲染进程发送服务器URL
+    win?.webContents.send('server-url', serverUrl)
   })
 
   // Make all links open with the browser, not with the application
@@ -76,6 +161,11 @@ async function createWindow () {
     return { action: 'deny' }
   })
   // win.webContents.on('will-navigate', (event, url) => { }) #344
+
+  // Set application menu
+  if (process.env.NODE_ENV !== 'development') {
+    Menu.setApplicationMenu(null)
+  }
 }
 
 app.whenReady().then(createWindow)
@@ -100,6 +190,11 @@ app.on('activate', () => {
   } else {
     createWindow()
   }
+})
+
+// 暴露服务器URL给渲染进程
+ipcMain.handle('get-server-url', () => {
+  return serverUrl
 })
 
 // New window example arg: new windows url

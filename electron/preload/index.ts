@@ -1,33 +1,33 @@
 import { ipcRenderer, contextBridge } from 'electron'
 
-window.ipcRenderer = ipcRenderer
-window.contextBridge = contextBridge
+// window.ipcRenderer = ipcRenderer
+// window.contextBridge = contextBridge
 
 // --------- Expose some API to the Renderer process ---------
 contextBridge.exposeInMainWorld('ipcRenderer', {
-  on(...args: Parameters<typeof ipcRenderer.on>) {
+  on (...args: Parameters<typeof ipcRenderer.on>) {
     const [channel, listener] = args
     return ipcRenderer.on(channel, (event, ...args) => listener(event, ...args))
   },
-  off(...args: Parameters<typeof ipcRenderer.off>) {
+  off (...args: Parameters<typeof ipcRenderer.off>) {
     const [channel, ...omit] = args
     return ipcRenderer.off(channel, ...omit)
   },
-  send(...args: Parameters<typeof ipcRenderer.send>) {
+  send (...args: Parameters<typeof ipcRenderer.send>) {
     const [channel, ...omit] = args
     return ipcRenderer.send(channel, ...omit)
   },
-  invoke(...args: Parameters<typeof ipcRenderer.invoke>) {
+  invoke (...args: Parameters<typeof ipcRenderer.invoke>) {
     const [channel, ...omit] = args
     return ipcRenderer.invoke(channel, ...omit)
-  },
+  }
 
   // You can expose other APTs you need here.
   // ...
 })
 
 // --------- Preload scripts loading ---------
-function domReady(condition: DocumentReadyState[] = ['complete', 'interactive']) {
+function domReady (condition: DocumentReadyState[] = ['complete', 'interactive']) {
   return new Promise((resolve) => {
     if (condition.includes(document.readyState)) {
       resolve(true)
@@ -42,16 +42,16 @@ function domReady(condition: DocumentReadyState[] = ['complete', 'interactive'])
 }
 
 const safeDOM = {
-  append(parent: HTMLElement, child: HTMLElement) {
+  append (parent: HTMLElement, child: HTMLElement) {
     if (!Array.from(parent.children).find(e => e === child)) {
       return parent.appendChild(child)
     }
   },
-  remove(parent: HTMLElement, child: HTMLElement) {
+  remove (parent: HTMLElement, child: HTMLElement) {
     if (Array.from(parent.children).find(e => e === child)) {
       return parent.removeChild(child)
     }
-  },
+  }
 }
 
 /**
@@ -60,7 +60,7 @@ const safeDOM = {
  * https://projects.lukehaas.me/css-loaders
  * https://matejkustec.github.io/SpinThatShit
  */
-function useLoading() {
+function useLoading () {
   const className = `loaders-css__square-spin`
   const styleContent = `
 @keyframes square-spin {
@@ -98,14 +98,14 @@ function useLoading() {
   oDiv.innerHTML = `<div class="${className}"><div></div></div>`
 
   return {
-    appendLoading() {
+    appendLoading () {
       safeDOM.append(document.head, oStyle)
       safeDOM.append(document.body, oDiv)
     },
-    removeLoading() {
+    removeLoading () {
       safeDOM.remove(document.head, oStyle)
       safeDOM.remove(document.body, oDiv)
-    },
+    }
   }
 }
 

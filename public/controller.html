@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>键盘控制器</title>
+    <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f0f0f0;
+    }
+
+    .controller {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: 1fr 1fr 1fr;
+      gap: 10px;
+      width: 300px;
+      height: 300px;
+    }
+
+    button {
+      font-size: 24px;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #up {
+      grid-column: 2;
+      grid-row: 1;
+    }
+
+    #left {
+      grid-column: 1;
+      grid-row: 2;
+    }
+
+    #down {
+      grid-column: 2;
+      grid-row: 2;
+    }
+
+    #right {
+      grid-column: 3;
+      grid-row: 2;
+    }
+
+    #space {
+      grid-column: 1 / 4;
+      grid-row: 3;
+      background-color: #2196F3;
+    }
+
+    #space:hover {
+      background-color: #0b7dda;
+    }
+
+    .status {
+      margin-bottom: 20px;
+      padding: 10px;
+      border-radius: 4px;
+      background-color: white;
+    }
+    </style>
+  </head>
+  <body>
+    <div class="status">连接状态: <span id="connection-status">未连接</span></div>
+    <div class="controller">
+      <button id="up">↑</button>
+      <button id="left">←</button>
+      <button id="down">↓</button>
+      <button id="right">→</button>
+      <button id="space">空格</button>
+    </div>
+
+    <script>
+    // 获取当前页面的URL，用于WebSocket连接
+    const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
+    const wsHost = window.location.host
+    const wsUrl = `${wsProtocol}//${wsHost}`
+
+    // 连接WebSocket
+    let ws
+
+    function connect () {
+      ws = new WebSocket(wsUrl)
+
+      ws.onopen = () => {
+        document.getElementById('connection-status').textContent = '已连接'
+        document.getElementById('connection-status').style.color = 'green'
+      }
+
+      ws.onclose = () => {
+        document.getElementById('connection-status').textContent = '已断开'
+        document.getElementById('connection-status').style.color = 'red'
+        // 尝试重连
+        setTimeout(connect, 3000)
+      }
+
+      ws.onerror = (error) => {
+        console.error('WebSocket错误:', error)
+      }
+    }
+
+    // 发送命令到服务器
+    function sendCommand (command) {
+      if (ws && ws.readyState === WebSocket.OPEN) {
+        ws.send(command)
+      }
+    }
+
+    // 绑定按钮事件
+    document.getElementById('up').addEventListener('click', () => sendCommand('up'))
+    document.getElementById('down').addEventListener('click', () => sendCommand('down'))
+    document.getElementById('left').addEventListener('click', () => sendCommand('left'))
+    document.getElementById('right').addEventListener('click', () => sendCommand('right'))
+    document.getElementById('space').addEventListener('click', () => sendCommand('space'))
+
+    // 绑定键盘事件
+    document.addEventListener('keydown', (e) => {
+      switch (e.key) {
+        case 'ArrowUp':
+          sendCommand('up')
+          e.preventDefault()
+          break
+        case 'ArrowDown':
+          sendCommand('down')
+          e.preventDefault()
+          break
+        case 'ArrowLeft':
+          sendCommand('left')
+          e.preventDefault()
+          break
+        case 'ArrowRight':
+          sendCommand('right')
+          e.preventDefault()
+          break
+        case ' ':
+          sendCommand('space')
+          e.preventDefault()
+          break
+      }
+    })
+
+    // 初始化连接
+    connect()
+    </script>
+  </body>
+</html>

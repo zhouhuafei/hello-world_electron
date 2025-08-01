@@ -25,9 +25,16 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "@types/koa": "^3.0.0",
+    "@types/koa-router": "^7.4.8",
+    "@types/koa-static": "^4.0.4",
+    "@types/qrcode": "^1.5.5",
+    "@types/ws": "^8.18.1",
     "@vitejs/plugin-vue": "^5.0.4",
     "electron": "^29.1.1",
     "electron-builder": "^24.13.3",
+    "electron-rebuild": "^3.2.9",
+    "sass-embedded": "^1.89.2",
     "typescript": "^5.4.2",
     "vite": "^5.1.5",
     "vite-plugin-electron": "^0.28.4",
@@ -36,6 +43,12 @@
     "vue-tsc": "^2.0.6"
   },
   "dependencies": {
-    "pdf2image": "^1.2.3"
+    "koa": "^3.0.1",
+    "koa-router": "^13.1.1",
+    "koa-static": "^5.0.0",
+    "pdf2image": "^1.2.3",
+    "qrcode": "^1.5.4",
+    "robotjs": "^0.6.0",
+    "ws": "^8.18.3"
   }
 }
