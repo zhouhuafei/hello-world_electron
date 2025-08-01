@@ -121,13 +121,14 @@ if (!app.requestSingleInstanceLock()) {
 let win: BrowserWindow | null = null
 const preload = path.join(__dirname, '../preload/index.mjs')
 const indexHtml = path.join(RENDERER_DIST, 'index.html')
+const size = 600
 
 async function createWindow () {
   win = new BrowserWindow({
     title: '键盘控制器',
     icon: path.join(process.env.VITE_PUBLIC, 'favicon.ico'),
-    width: 600,
-    height: 600,
+    width: VITE_DEV_SERVER_URL ? size * 2 : size,
+    height: size,
     webPreferences: {
       preload
       // Warning: Enable nodeIntegration and disable contextIsolation is not secure in production
