@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="hammer.min.js"></script>
     <title>键盘控制器</title>
     <style>
     body {
@@ -15,6 +16,7 @@
       margin: 0;
       background-color: #f0f0f0;
       user-select: none;
+      overflow: hidden;
     }
 
     .controller {
@@ -153,6 +155,42 @@
           break
         case ' ':
           sendCommand('space')
+          e.preventDefault()
+          break
+      }
+    })
+
+    // 使用 Hammer.js 处理触摸滑动手势
+    const gestureArea = document.querySelector('body')
+
+    // 初始化 Hammer 实例
+    const hammer = new Hammer(gestureArea)
+
+    // 配置滑动识别器（可选：设置最小滑动距离）
+    hammer.get('swipe').set({
+      direction: Hammer.DIRECTION_ALL, // 允许所有方向的滑动
+      threshold: 30, // 最小滑动距离（像素），防止误触
+      velocity: 0.1 // 最小滑动速度
+    })
+
+    // 监听滑动事件
+    hammer.on('swipe', (e) => {
+      // 判断滑动方向
+      switch (e.direction) {
+        case Hammer.DIRECTION_UP:
+          sendCommand('down')
+          e.preventDefault()
+          break
+        case Hammer.DIRECTION_DOWN:
+          sendCommand('up')
+          e.preventDefault()
+          break
+        case Hammer.DIRECTION_LEFT:
+          sendCommand('left')
+          e.preventDefault()
+          break
+        case Hammer.DIRECTION_RIGHT:
+          sendCommand('right')
           e.preventDefault()
           break
       }
