@@ -58,6 +58,15 @@ wss.on('connection', (ws) => {
 
     // 根据命令模拟键盘输入
     switch (command) {
+      case 'mute':
+        robot.keyTap('audio_mute')
+        break
+      case 'volumeDown':
+        robot.keyTap('audio_vol_down')
+        break
+      case 'volumeUp':
+        robot.keyTap('audio_vol_up')
+        break
       case 'up':
         robot.keyTap('up')
         break

@@ -22,8 +22,8 @@
     .controller {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
-      grid-template-rows: 1fr 1fr 1fr;
-      gap: 10px;
+      grid-template-rows: 1fr 1fr 1fr 1fr;
+      gap: 13px;
       width: 300px;
       height: 300px;
     }
@@ -43,29 +43,51 @@
       background-color: #45a049;
     }
 
-    #up {
+    #mute {
+      grid-column: 1;
+      grid-row: 1;
+      background-color: #2196F3;
+    }
+
+    #volumeDown {
       grid-column: 2;
       grid-row: 1;
+      background-color: #2196F3;
+    }
+
+    #volumeUp {
+      grid-column: 3;
+      grid-row: 1;
+      background-color: #2196F3;
+    }
+
+    #mute:hover, #volumeDown:hover, #volumeUp:hover {
+      background-color: #0b7dda;
+    }
+
+    #up {
+      grid-column: 2;
+      grid-row: 2;
     }
 
     #left {
       grid-column: 1;
-      grid-row: 2;
+      grid-row: 3;
     }
 
     #down {
       grid-column: 2;
-      grid-row: 2;
+      grid-row: 3;
     }
 
     #right {
       grid-column: 3;
-      grid-row: 2;
+      grid-row: 3;
     }
 
     #space {
       grid-column: 1 / 4;
-      grid-row: 3;
+      grid-row: 4;
       background-color: #2196F3;
     }
 
@@ -74,7 +96,7 @@
     }
 
     .status {
-      margin-bottom: 20px;
+      margin-bottom: 13px;
       padding: 10px;
       border-radius: 4px;
       background-color: white;
@@ -82,25 +104,30 @@
 
     .hint {
       text-align: center;
-      margin-top: 10px;
+      margin-bottom: 10px;
       color: grey;
       font-size: 12px;
     }
     </style>
   </head>
   <body>
+    <div class="hint">
+      <div>任意区域手指上滑 会触发下键↓</div>
+      <div>任意区域手指下滑 会触发上键↑</div>
+      <div>任意区域手指左滑 会触发左键←</div>
+      <div>任意区域手指右滑 会触发右键→</div>
+      <div>点击非按钮区域 等同于按空格键</div>
+    </div>
     <div class="status">连接状态: <span id="connection-status">未连接</span></div>
     <div class="controller">
+      <button id="mute">静音</button>
+      <button id="volumeDown">音量-</button>
+      <button id="volumeUp">音量+</button>
       <button id="up">↑</button>
       <button id="left">←</button>
       <button id="down">↓</button>
       <button id="right">→</button>
       <button id="space">空格</button>
-    </div>
-    <div class="hint">
-      <div>任意区域手指上滑 → 下键、任意区域手指下滑 → 上键</div>
-      <div>任意区域手指左滑 → 左键、任意区域手指右滑 → 右键</div>
-      <div>点击非按钮区域 → 等同于按空格键</div>
     </div>
 
     <script>
@@ -140,6 +167,18 @@
     }
 
     // 绑定按钮事件
+    document.getElementById('mute').addEventListener('click', (e) => {
+      e.stopPropagation()
+      sendCommand('mute')
+    })
+    document.getElementById('volumeDown').addEventListener('click', (e) => {
+      e.stopPropagation()
+      sendCommand('volumeDown')
+    })
+    document.getElementById('volumeUp').addEventListener('click', (e) => {
+      e.stopPropagation()
+      sendCommand('volumeUp')
+    })
     document.getElementById('up').addEventListener('click', (e) => {
       e.stopPropagation()
       sendCommand('up')
@@ -168,6 +207,18 @@
     // 绑定键盘事件
     document.addEventListener('keydown', (e) => {
       switch (e.key) {
+        case 'AudioVolumeMute':
+          sendCommand('mute')
+          e.preventDefault()
+          break
+        case 'AudioVolumeDown':
+          sendCommand('volumeDown')
+          e.preventDefault()
+          break
+        case 'AudioVolumeUp':
+          sendCommand('volumeUp')
+          e.preventDefault()
+          break
         case 'ArrowUp':
           sendCommand('up')
           e.preventDefault()
