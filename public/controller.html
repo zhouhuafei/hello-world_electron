@@ -237,6 +237,10 @@
     }
 
     // 绑定按钮事件
+    document.addEventListener('click', (e) => {
+      e.stopPropagation()
+      sendCommand('space')
+    })
     const arr = [...document.querySelectorAll('.controller button')]
     arr.forEach(button => {
       button.addEventListener('click', (e) => {
