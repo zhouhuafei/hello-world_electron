@@ -38,7 +38,7 @@
       margin-bottom: 0;
     }
 
-    button {
+    .row button {
       line-height: 1;
       width: 31%;
       display: flex;
@@ -53,56 +53,48 @@
       transition: background-color 0.3s;
     }
 
-    button:active {
+    .row button:active {
       background-color: #0b7dda;
     }
 
-    button.green {
+    .row button.green {
       background-color: #4CAF50;
     }
 
-    button.green:active {
+    .row button.green:active {
       background-color: #45a049;
     }
 
-    button.space {
+    .row button.space {
       flex: 1;
     }
 
-    .col {
+    .row button .col {
       width: 31%;
     }
 
-    .title {
+    .row button .title {
       font-size: 12px;
       display: flex;
       align-items: flex-end;
       justify-content: center;
     }
 
-    .subtitle {
+    .row button .subtitle {
       font-size: 10px;
       margin-left: 3px;
     }
 
-    .desc {
+    .row button .desc {
       font-size: 10px;
     }
 
-    .desc:empty {
+    .row button .desc:empty {
       display: none;
     }
 
-    .desc:not(:empty) {
+    .row button .desc:not(:empty) {
       margin-top: 5px;
-    }
-
-    .status {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 4px;
-      margin: 15px 0 12px;
     }
 
     .hint {
@@ -110,6 +102,15 @@
       color: grey;
       font-size: 12px;
       line-height: 1.25;
+      border-radius: 8px;
+      padding: 10px;
+      background: white;
+      margin-top: 15px;
+      border: 1px dashed grey;
+    }
+
+    .hint .status {
+      color: black;
     }
     </style>
   </head>
@@ -192,16 +193,13 @@
         </button>
       </div>
     </div>
-    <div class="status">
-      <span>连接状态：</span>
-      <span id="connection-status">未连接</span>
-    </div>
     <div class="hint">
+      <div class="status"><span>连接状态：</span><span id="connection-status">未连接</span></div>
+      <div>点击非按钮区域 等同于按空格键</div>
       <div>任意区域手指上滑 会触发下键↓</div>
       <div>任意区域手指下滑 会触发上键↑</div>
       <div>任意区域手指左滑 会触发左键←</div>
       <div>任意区域手指右滑 会触发右键→</div>
-      <div>点击非按钮区域 等同于按空格键</div>
     </div>
 
     <script>
