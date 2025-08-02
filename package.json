@@ -20,9 +20,14 @@
   },
   "type": "module",
   "scripts": {
+    "postinstall": "electron-builder install-app-deps",
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build && electron-builder",
     "preview": "vite preview"
+  },
+  "build": {
+    "npmRebuild": true,
+    "buildDependenciesFromSource": true
   },
   "devDependencies": {
     "@types/koa": "^3.0.0",

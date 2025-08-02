@@ -12,6 +12,15 @@ import robot from 'robotjs'
 const require = createRequire(import.meta.url)
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
+// 原有Electron代码
+process.env.APP_ROOT = path.join(__dirname, '../..')
+
+export const MAIN_DIST = path.join(process.env.APP_ROOT, 'dist-electron')
+export const RENDERER_DIST = path.join(process.env.APP_ROOT, 'dist')
+export const VITE_DEV_SERVER_URL = process.env.VITE_DEV_SERVER_URL
+
+process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL ? path.join(process.env.APP_ROOT, 'public') : RENDERER_DIST
+
 // The built directory structure
 //
 // ├─┬ dist-electron
@@ -24,7 +33,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 //
 
 // 服务器相关配置
-const PORT = 5918
+const PORT = VITE_DEV_SERVER_URL ? 5918 : 5919
 const localIP = getLocalIP()
 const serverUrl = `http://${localIP}:${PORT}`
 
@@ -33,7 +42,7 @@ const appKoa = new Koa()
 const router = new Router()
 
 // 设置静态文件目录
-appKoa.use(staticServe(path.join(__dirname, '../../public')))
+appKoa.use(staticServe(process.env.VITE_PUBLIC))
 
 // 路由
 router.get('/', (ctx) => {
@@ -104,17 +113,6 @@ function getLocalIP () {
   }
   return '127.0.0.1'
 }
-
-// 原有Electron代码
-process.env.APP_ROOT = path.join(__dirname, '../..')
-
-export const MAIN_DIST = path.join(process.env.APP_ROOT, 'dist-electron')
-export const RENDERER_DIST = path.join(process.env.APP_ROOT, 'dist')
-export const VITE_DEV_SERVER_URL = process.env.VITE_DEV_SERVER_URL
-
-process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL
-  ? path.join(process.env.APP_ROOT, 'public')
-  : RENDERER_DIST
 
 // Disable GPU Acceleration for Windows 7
 if (os.release().startsWith('6.1')) app.disableHardwareAcceleration()
