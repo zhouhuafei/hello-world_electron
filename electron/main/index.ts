@@ -41,15 +41,15 @@ const serverUrl = `http://${localIP}:${PORT}`
 const appKoa = new Koa()
 const router = new Router()
 
-// 设置静态文件目录
-appKoa.use(staticServe(process.env.VITE_PUBLIC))
-
 // 路由
 router.get('/', (ctx) => {
   ctx.redirect('/controller.html')
 })
 
 appKoa.use(router.routes())
+
+// 设置静态文件目录
+appKoa.use(staticServe(process.env.VITE_PUBLIC))
 
 // 启动HTTP服务器
 const server = appKoa.listen(PORT, () => {
