@@ -133,7 +133,7 @@ const size = 600
 async function createWindow () {
   win = new BrowserWindow({
     title: '键盘控制器',
-    icon: path.join(process.env.VITE_PUBLIC, 'favicon.ico'),
+    icon: path.join(process.env.VITE_PUBLIC, 'favicon.png'),
     width: VITE_DEV_SERVER_URL ? size * 2 : size,
     height: size,
     webPreferences: {
