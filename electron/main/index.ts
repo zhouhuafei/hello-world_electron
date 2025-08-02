@@ -66,32 +66,7 @@ wss.on('connection', (ws) => {
     console.log(`Received command: ${command}`)
 
     // 根据命令模拟键盘输入
-    switch (command) {
-      case 'mute':
-        robot.keyTap('audio_mute')
-        break
-      case 'volumeDown':
-        robot.keyTap('audio_vol_down')
-        break
-      case 'volumeUp':
-        robot.keyTap('audio_vol_up')
-        break
-      case 'up':
-        robot.keyTap('up')
-        break
-      case 'down':
-        robot.keyTap('down')
-        break
-      case 'left':
-        robot.keyTap('left')
-        break
-      case 'right':
-        robot.keyTap('right')
-        break
-      case 'space':
-        robot.keyTap('space')
-        break
-    }
+    robot.keyTap(command)
   })
 
   ws.on('close', () => {
