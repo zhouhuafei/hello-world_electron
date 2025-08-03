@@ -48,6 +48,7 @@
     "koa": "^3.0.1",
     "koa-router": "^13.1.1",
     "koa-static": "^5.0.0",
+    "open": "^10.2.0",
     "pdf2image": "^1.2.3",
     "qrcode": "^1.5.4",
     "robotjs": "^0.6.0",

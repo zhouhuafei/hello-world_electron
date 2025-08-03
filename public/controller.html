@@ -38,6 +38,10 @@
       margin-bottom: 0;
     }
 
+    .row .col {
+      width: 31%;
+    }
+
     .row button {
       line-height: 1;
       width: 31%;
@@ -67,10 +71,6 @@
 
     .row button.space {
       flex: 1;
-    }
-
-    .row button .col {
-      width: 31%;
     }
 
     .row button .title {
@@ -131,6 +131,34 @@
         </button>
       </div>
       <div class="row">
+        <button data-id="Ctrl + R">
+          <span class="title">Ctrl + R</span>
+          <span class="desc">刷新当前网页</span>
+        </button>
+        <button data-id="Ctrl + W">
+          <span class="title">Ctrl + W</span>
+          <span class="desc">关闭当前网页</span>
+        </button>
+        <button data-id="Ctrl + Shift + T">
+          <span class="title">Ctrl + Shift + T</span>
+          <span class="desc">打开被关闭的网页</span>
+        </button>
+      </div>
+      <div class="row">
+        <button data-id="Open + douyin" class="green">
+          <span class="title">打开<span class="subtitle">抖音</span></span>
+          <span class="desc">打开网页版抖音</span>
+        </button>
+        <button data-id="Alt + F4">
+          <span class="title">Alt + F4</span>
+          <span class="desc">关闭当前应用</span>
+        </button>
+        <button data-id="Win + L">
+          <span class="title">Win + L</span>
+          <span class="desc">锁屏</span>
+        </button>
+      </div>
+      <div class="row">
         <button data-id="j">
           <span class="title">J<span class="subtitle">抖音</span></span>
           <span class="desc">清屏/取消清屏</span>
@@ -188,8 +216,8 @@
       </div>
       <div class="row">
         <button data-id="space" class="space">
-          <span class="title">空格键</span>
-          <span class="desc">暂停/播放</span>
+          <span class="title">Space<span class="subtitle">空格键</span></span>
+          <span class="desc">播放/暂停视频</span>
         </button>
       </div>
     </div>

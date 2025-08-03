@@ -8,6 +8,8 @@ import staticServe from 'koa-static'
 import Router from 'koa-router'
 import WebSocket, { WebSocketServer } from 'ws'
 import robot from 'robotjs'
+import { exec } from 'child_process'
+import open from 'open'
 
 const require = createRequire(import.meta.url)
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -66,13 +68,38 @@ wss.on('connection', (ws) => {
     console.log(`Received command: ${command}`)
 
     // 根据命令模拟键盘输入
-    robot.keyTap(command)
+    if (command === `Ctrl + R`) {
+      robot.keyTap('r', ['control'])
+    } else if (command === `Win + L`) {
+      lockScreen()
+    } else if (command === `Open + douyin`) {
+      open('https://www.douyin.com')
+    } else if (command === `Alt + F4`) {
+      robot.keyTap('f4', ['alt'])
+    } else if (command === `Ctrl + W`) {
+      robot.keyTap('w', ['control'])
+    } else if (command === `Ctrl + Shift + T`) {
+      robot.keyTap('t', ['control', 'shift'])
+    } else {
+      robot.keyTap(command)
+    }
   })
 
   ws.on('close', () => {
     console.log('Client disconnected')
   })
 })
+
+// 锁屏函数
+function lockScreen () {
+  exec('rundll32.exe user32.dll,LockWorkStation', (error, stdout, stderr) => {
+    if (error) {
+      console.error(`exec error: ${error}`)
+      return
+    }
+    console.log('Screen is locked.')
+  })
+}
 
 // 获取本地IP地址
 function getLocalIP () {
