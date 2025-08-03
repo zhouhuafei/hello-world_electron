@@ -97,6 +97,7 @@ wss.on('connection', (ws) => {
       const newY = currentY + o.velocityY * base
 
       // 执行移动
+      robot.setMouseDelay(0)
       robot.moveMouse(newX, newY)
     } else {
       robot.keyTap(command)
