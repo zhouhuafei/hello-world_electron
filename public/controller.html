@@ -236,11 +236,12 @@
     <div class="hint">
       <div class="finger">
         <div><span>连接状态：</span><span class="connection-status">未连接</span></div>
+        <div>可在此处区域 进行手势操控</div>
+        <div>点击此处区域 等于按空格键</div>
         <div>使用手指上滑 会触发下键↓</div>
         <div>使用手指下滑 会触发上键↑</div>
         <div>使用手指左滑 会触发左键←</div>
         <div>使用手指右滑 会触发右键→</div>
-        <div>点击此处区域 等于按空格键</div>
       </div>
       <div class="mouse">
         <div><span>连接状态：</span><span class="connection-status">未连接</span></div>
@@ -248,11 +249,67 @@
         <div>单击此处区域 等于鼠标左击</div>
         <div>双击此处区域 等于鼠标右击</div>
         <div>使用手指滑动 操控鼠标移动</div>
-        <div>可在其它区域 进行手势操控</div>
       </div>
     </div>
 
     <script>
+    class ClickHandler {
+      constructor (element, options) {
+        this.element = element
+        this.options = {
+          delay: 200,
+          stopPropagation: true,
+          ...options
+        }
+        this.clickTimer = null
+        this.clickCount = 0
+        this.bindEvents()
+      }
+
+      bindEvents () {
+        this.element.addEventListener('click', (e) => this.handleClick(e))
+        this.element.addEventListener('dblclick', (e) => {
+          e.preventDefault()
+          if (this.options.stopPropagation) {
+            e.stopPropagation()
+          }
+        })
+      }
+
+      handleClick (e) {
+        if (this.options.stopPropagation) {
+          e.stopPropagation()
+        }
+        this.clickCount++
+        if (this.clickCount === 1) {
+          this.clickTimer = setTimeout(() => {
+            if (this.clickCount === 1 && typeof this.options.onClick === 'function') {
+              this.options.onClick(e)
+            }
+            this.resetState()
+          }, this.options.delay)
+        } else if (this.clickCount === 2) {
+          clearTimeout(this.clickTimer)
+          if (typeof this.options.onDblClick === 'function') {
+            this.options.onDblClick(e)
+          }
+          this.resetState()
+        }
+      }
+
+      resetState () {
+        clearTimeout(this.clickTimer)
+        this.clickTimer = null
+        this.clickCount = 0
+      }
+
+      destroy () {
+        this.resetState()
+        this.element.removeEventListener('click', (e) => this.handleClick(e))
+        this.element.removeEventListener('dblclick', (e) => e.preventDefault())
+      }
+    }
+
     // 获取当前页面的URL，用于WebSocket连接
     const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
     const wsHost = window.location.host
@@ -295,10 +352,6 @@
     }
 
     // 绑定按钮事件
-    document.addEventListener('click', (e) => {
-      e.stopPropagation()
-      sendCommand('space')
-    })
     const arr = [...document.querySelectorAll('.controller button')]
     arr.forEach(button => {
       button.addEventListener('click', (e) => {
@@ -308,40 +361,73 @@
       })
     })
 
-    // 使用 Hammer.js 处理触摸滑动手势
-    const gestureArea = document.querySelector('body')
+    // 手势区域处理
+    const fingerTrigger = (className) => {
+      // 使用 Hammer.js 处理触摸滑动手势
+      const gestureArea = document.querySelector(className)
 
-    // 初始化 Hammer 实例
-    const hammer = new Hammer(gestureArea)
+      // 初始化 Hammer 实例
+      const hammer = new Hammer(gestureArea)
 
-    // 配置滑动识别器（可选：设置最小滑动距离）
-    hammer.get('swipe').set({
-      direction: Hammer.DIRECTION_ALL, // 允许所有方向的滑动
-      threshold: 30, // 最小滑动距离（像素），防止误触
-      velocity: 0.1 // 最小滑动速度
+      // 配置滑动识别器（可选：设置最小滑动距离）
+      hammer.get('swipe').set({
+        direction: Hammer.DIRECTION_ALL, // 允许所有方向的滑动
+        threshold: 30, // 最小滑动距离（像素），防止误触
+        velocity: 0.1 // 最小滑动速度
+      })
+
+      // 监听滑动事件
+      hammer.on('swipe', (e) => {
+        // 判断滑动方向
+        switch (e.direction) {
+          case Hammer.DIRECTION_UP:
+            sendCommand('down')
+            e.preventDefault()
+            break
+          case Hammer.DIRECTION_DOWN:
+            sendCommand('up')
+            e.preventDefault()
+            break
+          case Hammer.DIRECTION_LEFT:
+            sendCommand('left')
+            e.preventDefault()
+            break
+          case Hammer.DIRECTION_RIGHT:
+            sendCommand('right')
+            e.preventDefault()
+            break
+        }
+      })
+    }
+    fingerTrigger('.finger')
+    // 给.finger添加单击事件
+    document.querySelector('.finger').addEventListener('click', (e) => {
+      e.stopPropagation()
+      sendCommand('space')
     })
 
-    // 监听滑动事件
-    hammer.on('swipe', (e) => {
-      // 判断滑动方向
-      switch (e.direction) {
-        case Hammer.DIRECTION_UP:
-          sendCommand('down')
-          e.preventDefault()
-          break
-        case Hammer.DIRECTION_DOWN:
-          sendCommand('up')
-          e.preventDefault()
-          break
-        case Hammer.DIRECTION_LEFT:
-          sendCommand('left')
-          e.preventDefault()
-          break
-        case Hammer.DIRECTION_RIGHT:
-          sendCommand('right')
-          e.preventDefault()
-          break
-      }
+    // 鼠标区域处理
+    const mouseTrigger = (className) => {
+      // 使用 Hammer.js 处理触摸滑动手势
+      const gestureArea = document.querySelector(className)
+
+      // 初始化 Hammer 实例
+      const hammer = new Hammer(gestureArea)
+
+      // 配置滑动识别器（可选：设置最小滑动距离）
+      hammer.get('pan').set({
+        direction: Hammer.DIRECTION_ALL, // 允许所有方向的滑动
+        enable: true
+      })
+
+      // 监听滑动事件
+      hammer.on('pan', (e) => sendCommand(JSON.stringify({ key: 'mousemove', velocityX: e.velocityX, velocityY: e.velocityY })))
+    }
+    mouseTrigger('.mouse')
+    // 给.mouse添加单击事件/双击事件
+    new ClickHandler(document.querySelector('.mouse'), {
+      onClick: (e) => sendCommand('click'),
+      onDblClick: (e) => sendCommand('dblclick')
     })
 
     // 初始化连接

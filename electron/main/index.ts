@@ -65,21 +65,39 @@ wss.on('connection', (ws) => {
 
   ws.on('message', (message) => {
     const command = message.toString()
-    console.log(`Received command: ${command}`)
+    // console.log(`Received command: ${command}`)
 
     // 根据命令模拟键盘输入
     if (command === `Ctrl + R`) {
       robot.keyTap('r', ['control'])
-    } else if (command === `Win + L`) {
-      lockScreen()
-    } else if (command === `Open + douyin`) {
-      open('https://www.douyin.com')
-    } else if (command === `Alt + F4`) {
-      robot.keyTap('f4', ['alt'])
     } else if (command === `Ctrl + W`) {
       robot.keyTap('w', ['control'])
     } else if (command === `Ctrl + Shift + T`) {
       robot.keyTap('t', ['control', 'shift'])
+    } else if (command === `Open + douyin`) {
+      open('https://www.douyin.com')
+    } else if (command === `Alt + F4`) {
+      robot.keyTap('f4', ['alt'])
+    } else if (command === `Win + L`) {
+      lockScreen()
+    } else if (command === `click`) {
+      robot.mouseClick('left')
+    } else if (command === `dblclick`) {
+      robot.mouseClick('right')
+    } else if (command.includes(`mousemove`)) {
+      const o = JSON.parse(command)
+      // 获取当前鼠标位置
+      const currentPos = robot.getMousePos()
+      const currentX = currentPos.x
+      const currentY = currentPos.y
+
+      // 计算新位置（当前位置 + 增量）
+      const base = 10
+      const newX = currentX + o.velocityX * base
+      const newY = currentY + o.velocityY * base
+
+      // 执行移动
+      robot.moveMouse(newX, newY)
     } else {
       robot.keyTap(command)
     }
