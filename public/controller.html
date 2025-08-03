@@ -100,7 +100,7 @@
     .hint {
       flex: 1;
       text-align: center;
-      color: grey;
+      color: black;
       font-size: 10px;
       line-height: 1.25;
       border-radius: 8px;
@@ -123,10 +123,6 @@
       width: 50%;
       flex-shrink: 0;
       border-left: 1px dashed grey;
-    }
-
-    .hint .status {
-      color: black;
     }
     </style>
   </head>
@@ -239,19 +235,20 @@
     </div>
     <div class="hint">
       <div class="finger">
-        <div class="status"><span>连接状态：</span><span class="connection-status1">未连接</span></div>
-        <div class="status">可在此处区域 进行手势操控</div>
-        <div>点击此处区域 等于按空格键</div>
+        <div><span>连接状态：</span><span class="connection-status">未连接</span></div>
         <div>使用手指上滑 会触发下键↓</div>
         <div>使用手指下滑 会触发上键↑</div>
         <div>使用手指左滑 会触发左键←</div>
         <div>使用手指右滑 会触发右键→</div>
+        <div>点击此处区域 等于按空格键</div>
       </div>
       <div class="mouse">
-        <div class="status"><span>连接状态：</span><span class="connection-status2">未连接</span></div>
-        <div class="status">可在此处区域 进行鼠标操控</div>
-        <div>点击此处区域 等于鼠标左击</div>
+        <div><span>连接状态：</span><span class="connection-status">未连接</span></div>
+        <div>可在此处区域 进行鼠标操控</div>
+        <div>单击此处区域 等于鼠标左击</div>
+        <div>双击此处区域 等于鼠标右击</div>
         <div>使用手指滑动 操控鼠标移动</div>
+        <div>可在其它区域 进行手势操控</div>
       </div>
     </div>
 
@@ -268,21 +265,19 @@
       ws = new WebSocket(wsUrl)
 
       ws.onopen = () => {
-        const s1 = document.querySelector('.connection-status1')
-        s1.textContent = '已连接'
-        s1.style.color = 'green'
-        const s2 = document.querySelector('.connection-status2')
-        s2.textContent = '已连接'
-        s2.style.color = 'green'
+        const connectionStatusAll = document.querySelectorAll('.connection-status')
+        connectionStatusAll.forEach(status => {
+          status.textContent = '已连接'
+          status.style.color = 'green'
+        })
       }
 
       ws.onclose = () => {
-        const s1 = document.querySelector('.connection-status1')
-        s1.textContent = '已断开'
-        s1.style.color = 'red'
-        const s2 = document.querySelector('.connection-status2')
-        s2.textContent = '已断开'
-        s2.style.color = 'red'
+        const connectionStatusAll = document.querySelectorAll('.connection-status')
+        connectionStatusAll.forEach(status => {
+          status.textContent = '已断开'
+          status.style.color = 'red'
+        })
         // 尝试重连
         setTimeout(connect, 3000)
       }
