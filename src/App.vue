@@ -2,7 +2,7 @@
   <!--<button @click="thisMethods.uploadFile">上传文件</button>-->
 
   <div class="app-container">
-    <h1>手机控制电脑键盘</h1>
+    <h1>使用手机控制网页版抖音</h1>
     <p>请使用手机扫描下方二维码</p>
     <div class="qr-code-container">
       <img :src="qrCodeUrl" alt="控制页面二维码" v-if="qrCodeUrl">
@@ -10,7 +10,7 @@
     </div>
     <!--<p class="url">{{ serverUrl }}</p>-->
     <p class="instructions">
-      扫描后在手机上点击方向键或空格键，即可控制电脑键盘
+      扫描后可以在手机上对网页版抖音进行控制
     </p>
   </div>
 </template>
@@ -59,7 +59,11 @@ onMounted(async () => {
 <style scoped lang="scss">
 .app-container {
   text-align: center;
-  padding: 20px;
+  padding-top: 30px;
+}
+
+h1 {
+  font-size: 2.6em;
 }
 
 .qr-code-container {

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <script src="hammer.min.js"></script>
-    <title>键盘控制器</title>
+    <title>抖音遥控器</title>
     <style>
     html {
       height: 100%;
@@ -98,15 +98,31 @@
     }
 
     .hint {
+      flex: 1;
       text-align: center;
       color: grey;
-      font-size: 12px;
+      font-size: 10px;
       line-height: 1.25;
       border-radius: 8px;
-      padding: 10px;
       background: white;
       margin-top: 15px;
       border: 1px dashed grey;
+      display: flex;
+    }
+
+    .hint .finger {
+      box-sizing: border-box;
+      padding-top: 10px;
+      width: 50%;
+      flex-shrink: 0;
+    }
+
+    .hint .mouse {
+      box-sizing: border-box;
+      padding-top: 10px;
+      width: 50%;
+      flex-shrink: 0;
+      border-left: 1px dashed grey;
     }
 
     .hint .status {
@@ -222,12 +238,21 @@
       </div>
     </div>
     <div class="hint">
-      <div class="status"><span>连接状态：</span><span id="connection-status">未连接</span></div>
-      <div>点击非按钮区域 等同于按空格键</div>
-      <div>任意区域手指上滑 会触发下键↓</div>
-      <div>任意区域手指下滑 会触发上键↑</div>
-      <div>任意区域手指左滑 会触发左键←</div>
-      <div>任意区域手指右滑 会触发右键→</div>
+      <div class="finger">
+        <div class="status"><span>连接状态：</span><span class="connection-status1">未连接</span></div>
+        <div class="status">可在此处区域 进行手势操控</div>
+        <div>点击此处区域 等于按空格键</div>
+        <div>使用手指上滑 会触发下键↓</div>
+        <div>使用手指下滑 会触发上键↑</div>
+        <div>使用手指左滑 会触发左键←</div>
+        <div>使用手指右滑 会触发右键→</div>
+      </div>
+      <div class="mouse">
+        <div class="status"><span>连接状态：</span><span class="connection-status2">未连接</span></div>
+        <div class="status">可在此处区域 进行鼠标操控</div>
+        <div>点击此处区域 等于鼠标左击</div>
+        <div>使用手指滑动 操控鼠标移动</div>
+      </div>
     </div>
 
     <script>
@@ -243,13 +268,21 @@
       ws = new WebSocket(wsUrl)
 
       ws.onopen = () => {
-        document.getElementById('connection-status').textContent = '已连接'
-        document.getElementById('connection-status').style.color = 'green'
+        const s1 = document.querySelector('.connection-status1')
+        s1.textContent = '已连接'
+        s1.style.color = 'green'
+        const s2 = document.querySelector('.connection-status2')
+        s2.textContent = '已连接'
+        s2.style.color = 'green'
       }
 
       ws.onclose = () => {
-        document.getElementById('connection-status').textContent = '已断开'
-        document.getElementById('connection-status').style.color = 'red'
+        const s1 = document.querySelector('.connection-status1')
+        s1.textContent = '已断开'
+        s1.style.color = 'red'
+        const s2 = document.querySelector('.connection-status2')
+        s2.textContent = '已断开'
+        s2.style.color = 'red'
         // 尝试重连
         setTimeout(connect, 3000)
       }
