@@ -1,5 +1,5 @@
 <template>
-  <!--<button @click.stop="thisMethods.uploadFile">上传文件</button>-->
+  <!--<div @click.stop="thisMethods.uploadFile">上传文件</div>-->
 
   <div class="app-container">
     <h1>使用手机控制网页版抖音</h1>

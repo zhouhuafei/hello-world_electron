@@ -43,7 +43,7 @@
       width: 31%;
     }
 
-    .row button {
+    .row .button {
       line-height: 1;
       width: 31%;
       display: flex;
@@ -58,49 +58,50 @@
       transition: background-color 0.3s;
       outline: none;
       -webkit-tap-highlight-color: transparent;
+      box-sizing: border-box;
     }
 
-    .row button:active {
+    .row .button:active {
       background-color: #0b7dda;
     }
 
-    .row button.green {
+    .row .button.green {
       background-color: #4CAF50;
     }
 
-    .row button.green:active {
+    .row .button.green:active {
       background-color: #45a049;
     }
 
-    .row button.green.no-active:active {
+    .row .button.green.no-active:active {
       background-color: #4CAF50;
     }
 
-    .row button.space {
+    .row .button.space {
       flex: 1;
     }
 
-    .row button .title {
+    .row .button .title {
       font-size: 12px;
       display: flex;
       align-items: flex-end;
       justify-content: center;
     }
 
-    .row button .subtitle {
+    .row .button .subtitle {
       font-size: 10px;
       margin-left: 3px;
     }
 
-    .row button .desc {
+    .row .button .desc {
       font-size: 10px;
     }
 
-    .row button .desc:empty {
+    .row .button .desc:empty {
       display: none;
     }
 
-    .row button .desc:not(:empty) {
+    .row .button .desc:not(:empty) {
       margin-top: 5px;
     }
 
@@ -217,108 +218,108 @@
   <body>
     <div class="controller">
       <div class="row">
-        <button data-id="audio_mute">
+        <div class="button" data-id="audio_mute">
           <span class="title">静音键</span>
           <span class="desc">静音</span>
-        </button>
-        <button data-id="audio_vol_down">
+        </div>
+        <div class="button" data-id="audio_vol_down">
           <span class="title">音量-</span>
           <span class="desc">减小音量</span>
-        </button>
-        <button data-id="audio_vol_up">
+        </div>
+        <div class="button" data-id="audio_vol_up">
           <span class="title">音量+</span>
           <span class="desc">增大音量</span>
-        </button>
+        </div>
       </div>
       <div class="row">
-        <button data-id="Ctrl + R">
+        <div class="button" data-id="Ctrl + R">
           <span class="title">Ctrl + R</span>
           <span class="desc">刷新当前网页</span>
-        </button>
-        <button data-id="Ctrl + W">
+        </div>
+        <div class="button" data-id="Ctrl + W">
           <span class="title">Ctrl + W</span>
           <span class="desc">关闭当前网页</span>
-        </button>
-        <button data-id="Ctrl + Shift + T">
+        </div>
+        <div class="button" data-id="Ctrl + Shift + T">
           <span class="title">Ctrl + Shift + T</span>
           <span class="desc">打开被关闭的网页</span>
-        </button>
+        </div>
       </div>
       <div class="row">
-        <button data-id="j">
+        <div class="button" data-id="j">
           <span class="title">J<span class="subtitle">抖音</span></span>
           <span class="desc">清屏/取消清屏</span>
-        </button>
-        <button data-id="Alt + F4">
+        </div>
+        <div class="button" data-id="Alt + F4">
           <span class="title">Alt + F4</span>
           <span class="desc">关闭当前应用</span>
-        </button>
-        <button data-id="Win + L">
+        </div>
+        <div class="button" data-id="Win + L">
           <span class="title">Win + L</span>
           <span class="desc">锁屏</span>
-        </button>
+        </div>
       </div>
       <div class="row">
-        <button data-id="Open + douyin" class="green">
+        <div class="button green" data-id="Open + douyin">
           <span class="title">打开<span class="subtitle">抖音</span></span>
           <span class="desc">打开网页版抖音</span>
-        </button>
-        <button data-id="k">
+        </div>
+        <div class="button" data-id="k">
           <span class="title">K<span class="subtitle">抖音</span></span>
           <span class="desc">开启/取消自动连播</span>
-        </button>
-        <button data-id="rewardTheDeveloper" class="green no-active">
+        </div>
+        <div class="button green no-active" data-id="rewardTheDeveloper">
           <span class="title">支持<span class="subtitle">开发者</span></span>
           <span class="desc">支持开发者</span>
-        </button>
+        </div>
       </div>
       <div class="row">
-        <button data-id="h">
+        <div class="button" data-id="h">
           <span class="title">H<span class="subtitle">抖音</span></span>
           <span class="desc">开启/取消全屏</span>
-        </button>
-        <button data-id="f">
+        </div>
+        <div class="button" data-id="f">
           <span class="title">F<span class="subtitle">抖音</span></span>
           <span class="desc">进入/退出作者主页</span>
-        </button>
-        <button data-id="g">
+        </div>
+        <div class="button" data-id="g">
           <span class="title">G<span class="subtitle">抖音</span></span>
           <span class="desc">关注/取消关注作者</span>
-        </button>
+        </div>
       </div>
       <div class="row">
-        <button data-id="x">
+        <div class="button" data-id="x">
           <span class="title">X<span class="subtitle">抖音</span></span>
           <span class="desc">打开/关闭评论</span>
-        </button>
-        <button data-id="up" class="green">
+        </div>
+        <div class="button green" data-id="up">
           <span class="title">↑</span>
           <span class="desc">上一个视频</span>
-        </button>
-        <button data-id="z">
+        </div>
+        <div class="button" data-id="z">
           <span class="title">Z<span class="subtitle">抖音</span></span>
           <span class="desc">点赞/取消点赞</span>
-        </button>
+        </div>
       </div>
       <div class="row">
-        <button data-id="left" class="green">
+        <div class="button green" data-id="left">
           <span class="title">←</span>
           <span class="desc">快退</span>
-        </button>
-        <button data-id="down" class="green">
+        </div>
+        <div class="button green" data-id="down">
           <span class="title">↓</span>
           <span class="desc">下一个视频</span>
-        </button>
-        <button data-id="right" class="green">
+        </div>
+        <div class="button green" data-id="right">
           <span class="title">→</span>
           <span class="desc">快进</span>
-        </button>
+        </div>
       </div>
       <div class="row">
-        <button data-id="space" class="space">
+        <div class="button space" data-id="space">
           <span class="title">Space<span class="subtitle">空格键</span></span>
           <span class="desc">播放/暂停视频</span>
-        </button>
+        </div>
       </div>
     </div>
     <div class="hint">
@@ -469,7 +470,7 @@
     }
 
     // 绑定按钮事件
-    const arr = [...document.querySelectorAll('.controller button')]
+    const arr = [...document.querySelectorAll('.controller .button')]
     arr.forEach(button => {
       button.addEventListener('click', (e) => {
         e.stopPropagation()
