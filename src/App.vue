@@ -9,9 +9,8 @@
       <p v-else>加载二维码中...</p>
     </div>
     <!--<p class="url">{{ serverUrl }}</p>-->
-    <p class="instructions">
-      扫描后可以在手机上对网页版抖音进行控制
-    </p>
+    <p class="instructions">扫描后可以在手机上对网页版抖音进行控制</p>
+    <p class="rewardTheDeveloper" @click="rewardTheDeveloper">打赏开发者</p>
   </div>
 </template>
 
@@ -33,6 +32,9 @@ const thisMethods = {
 
 const serverUrl = ref('')
 const qrCodeUrl = ref('')
+const rewardTheDeveloper = () => {
+  console.log('...1...TODO 打赏开发者 pc')
+}
 
 onMounted(async () => {
   // 从主进程获取服务器URL
@@ -59,7 +61,7 @@ onMounted(async () => {
 <style scoped lang="scss">
 .app-container {
   text-align: center;
-  padding-top: 30px;
+  padding-top: 20px;
 }
 
 h1 {
@@ -92,6 +94,14 @@ h1 {
 .instructions {
   color: #888;
   font-size: 14px;
-  margin-top: 20px;
+  margin: 20px 0 0;
+}
+
+.rewardTheDeveloper {
+  color: green;
+  font-size: 14px;
+  margin: 0;
+  padding: 20px 0;
+  cursor: pointer;
 }
 </style>

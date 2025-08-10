@@ -157,9 +157,9 @@
         </button>
       </div>
       <div class="row">
-        <button data-id="Open + douyin" class="green">
-          <span class="title">打开<span class="subtitle">抖音</span></span>
-          <span class="desc">打开网页版抖音</span>
+        <button data-id="j">
+          <span class="title">J<span class="subtitle">抖音</span></span>
+          <span class="desc">清屏/取消清屏</span>
         </button>
         <button data-id="Alt + F4">
           <span class="title">Alt + F4</span>
@@ -171,17 +171,17 @@
         </button>
       </div>
       <div class="row">
-        <button data-id="j">
-          <span class="title">J<span class="subtitle">抖音</span></span>
-          <span class="desc">清屏/取消清屏</span>
+        <button data-id="Open + douyin" class="green">
+          <span class="title">打开<span class="subtitle">抖音</span></span>
+          <span class="desc">打开网页版抖音</span>
         </button>
         <button data-id="k">
           <span class="title">K<span class="subtitle">抖音</span></span>
           <span class="desc">开启/取消自动连播</span>
         </button>
-        <button data-id="u">
-          <span class="title">U<span class="subtitle">抖音</span></span>
-          <span class="desc">开启/关闭小窗模式</span>
+        <button data-id="rewardTheDeveloper" class="green">
+          <span class="title">打赏<span class="subtitle">开发者</span></span>
+          <span class="desc">打赏开发者</span>
         </button>
       </div>
       <div class="row">
@@ -348,7 +348,9 @@
 
     // 发送命令到服务器
     function sendCommand (command) {
-      if (ws && ws.readyState === WebSocket.OPEN) {
+      if (command === 'rewardTheDeveloper') {
+        console.log('...1...TODO 打赏开发者 h5')
+      } else if (ws && ws.readyState === WebSocket.OPEN) {
         ws.send(command)
       }
     }
