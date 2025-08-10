@@ -20,6 +20,7 @@
       background-color: #f0f0f0;
       user-select: none;
       overflow: hidden;
+      touch-action: none;
       font-size: 12px;
       line-height: 1.25;
       padding: 15px;
@@ -55,6 +56,8 @@
       color: white;
       cursor: pointer;
       transition: background-color 0.3s;
+      outline: none;
+      -webkit-tap-highlight-color: transparent;
     }
 
     .row button:active {
@@ -67,6 +70,10 @@
 
     .row button.green:active {
       background-color: #45a049;
+    }
+
+    .row button.green.no-active:active {
+      background-color: #4CAF50;
     }
 
     .row button.space {
@@ -124,6 +131,87 @@
       flex-shrink: 0;
       border-left: 1px dashed grey;
     }
+
+    .reward-modal-mask {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      padding: 15px;
+      box-sizing: border-box;
+    }
+
+    .reward-modal {
+      background-color: white;
+      border-radius: 12px;
+      padding: 20px;
+      width: 300px;
+      text-align: center;
+      position: relative;
+    }
+
+    .reward-modal .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      padding: 0;
+      color: #666;
+    }
+
+    .reward-modal .close-btn:active {
+      background-color: #999;
+    }
+
+    .reward-modal h3 {
+      color: #333;
+      margin: 18px 0;
+      font-size: 18px;
+    }
+
+    .qrcode-container {
+      margin: 10px 0 20px;
+      padding: 10px;
+      background-color: white;
+      display: inline-block;
+      border-radius: 8px;
+      box-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
+    }
+
+    .reward-qrcode {
+      width: 200px;
+      height: 276px;
+      display: block;
+    }
+
+    .reward-desc {
+      color: #333;
+      margin: 10px 0;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .reward-motivation {
+      color: #666;
+      font-size: 12px;
+      margin-top: 15px;
+      line-height: 1.5;
+    }
     </style>
   </head>
   <body>
@@ -179,9 +267,9 @@
           <span class="title">K<span class="subtitle">抖音</span></span>
           <span class="desc">开启/取消自动连播</span>
         </button>
-        <button data-id="rewardTheDeveloper" class="green">
-          <span class="title">打赏<span class="subtitle">开发者</span></span>
-          <span class="desc">打赏开发者</span>
+        <button data-id="rewardTheDeveloper" class="green no-active">
+          <span class="title">支持<span class="subtitle">开发者</span></span>
+          <span class="desc">支持开发者</span>
         </button>
       </div>
       <div class="row">
@@ -251,6 +339,17 @@
         <div>使用手指滑动 操控鼠标移动</div>
         <div>手指上下滑动 鼠标上下移动</div>
         <div>手指左右滑动 鼠标左右移动</div>
+      </div>
+    </div>
+    <div class="reward-modal-mask" style="display: none;">
+      <div class="reward-modal">
+        <div class="close-btn">×</div>
+        <h3>支持开发者</h3>
+        <div class="qrcode-container">
+          <img src="PayWeChat.jpg" alt="微信支付二维码" class="reward-qrcode">
+        </div>
+        <p class="reward-desc">使用微信扫码对开发者进行支持</p>
+        <p class="reward-motivation">您的支持是开发者持续更新的动力</p>
       </div>
     </div>
 
@@ -346,10 +445,24 @@
       }
     }
 
+    // 支持开发者
+    const rewardModal = document.querySelector('.reward-modal-mask')
+    const closeBtn = document.querySelector('.reward-modal .close-btn')
+    const hideRewardModal = () => (rewardModal.style.display = 'none')
+    const showRewardModal = () => (rewardModal.style.display = 'flex')
+    closeBtn.addEventListener('click', (e) => {
+      e.stopPropagation()
+      hideRewardModal()
+    })
+    rewardModal.addEventListener('click', (e) => {
+      e.stopPropagation()
+      if (e.target === rewardModal) hideRewardModal()
+    })
+
     // 发送命令到服务器
     function sendCommand (command) {
       if (command === 'rewardTheDeveloper') {
-        console.log('...1...TODO 打赏开发者 h5')
+        showRewardModal()
       } else if (ws && ws.readyState === WebSocket.OPEN) {
         ws.send(command)
       }
